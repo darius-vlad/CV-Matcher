@@ -1,0 +1,50 @@
+{
+  "Name": "Andrei Călin Vasile",
+  "Technical Skills": [
+    "Python", "TensorFlow", "JavaScript", "ReactJS", "AWS SageMaker",
+    "Docker", "SQL", "PostgreSQL", "Figma", "Adobe XD"
+  ],
+  "Foreign Languages": [
+    "- English: C1",
+    "- French: B2",
+    "- Spanish: A2"
+  ],
+  "Education": [
+    {
+      "University Name": "University Politehnica of Bucharest",
+      "Program Duration": "4 years",
+      "Degree Name": "BSc Computer Science"
+    },
+    {
+      "University Name": "University Politehnica of Bucharest",
+      "Program Duration": "2 years",
+      "Degree Name": "Master Degree in Computer Science"
+    }
+  ],
+  "Certifications": [
+    {
+      "Title": "AWS Certified Machine Learning – Specialty",
+      "Issuing Authority": "Amazon Web Services"
+    },
+    {
+      "Title": "Certified Kubernetes Administrator (CKA)",
+      "Issuing Authority": "Cloud Computing Platform"
+    },
+    {
+      "Title": "Microsoft Certified: Azure Solutions Architect Expert",
+      "Issuing Authority": "Microsoft"
+    }
+  ],
+  "Project Experience": [
+    {
+      "Title": "Machine Learning Model Deployment on AWS SageMaker",
+      "Hidden Skills": ["Machine Learning Expertise", "Cloud Platforms Expertise", "Containerization Techniques", "CI/CD Pipeline Automation"],
+      "Technologies Used": ["Python", "TensorFlow", "AWS SageMaker", "Docker", "Jenkins"]
+    },
+    {
+      "Title": "Interactive Web Application for Data Visualization",
+      "Hidden Skills": ["Responsive Web Development", "UI/UX Design and Prototyping", "Database Integration"],
+      "Technologies Used": ["JavaScript", "ReactJS", "Figma", "Adobe XD", "PostgreSQL"]
+    }
+  ]
+}
