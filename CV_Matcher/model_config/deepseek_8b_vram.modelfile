@@ -1,3 +1,0 @@
-FROM deepseek-r1:8b
-PARAMETER num_gpu 128
-PARAMETER num_ctx 3072
