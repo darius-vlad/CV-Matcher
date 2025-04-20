@@ -15,13 +15,15 @@ public class RedisService {
 
     private static final String REDIS_CHANNEL = "queue";
 
-    public void enqueueCvId(String cvId) {
+    public boolean enqueueCvId(String cvId) {
         try {
             template.opsForList().leftPush(REDIS_CHANNEL, cvId);
             logger.info("Pushed CV id : " + cvId);
+            return true;
         }
         catch (Exception e) {
             logger.error("Error pushing CV id :" + cvId);
+            return false;
         }
     }
 }
