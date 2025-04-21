@@ -1,0 +1,82 @@
+{
+  "Name": "Humeniuc Dan Stefan",
+  "Contact Information": {
+    "Phone": "0721555534",
+    "Email": "humeniuc.dan.stefan@gmail.com",
+    "Location": "Cluj-Napoca, Cluj"
+  },
+  "Technical Skills": [
+    "C",
+    "C++",
+    "Java",
+    "x86-Assembly",
+    "Graphics Programming",
+    "Data Structures and Algorithms"
+  ],
+  "Soft Skills": [
+    "Problem Solving",
+    "Critical Thinking",
+    "Team Collaboration",
+    "Adaptability",
+    "Communication"
+  ],
+  "Education": [
+    {
+      "University Name": "Technical University of Cluj-Napoca",
+      "Program": "Bachelor's Degree in Computer Engineering and Technology Information",
+      "Start Year": "2022",
+      "Description": "Currently pursuing a Bachelor's degree in Computer Engineering and Technology Information."
+    }
+  ],
+  "Certifications": [],
+  "Project Experience": [
+    {
+      "Title": "EFitness",
+      "Description": "Distributed application based on microservices, designed to help users reach their fitness
+goals.",
+      "Technologies Used": ["C++", "CrowCPP", "Docker", "ZeroMQ"],
+      "Hidden Skills": ["Software Development Expertise", "Cloud Platforms Expertise"]
+    },
+    {
+      "Title": "ParkWise",
+      "Description": "AI-powered parking management platform with a robust Java Spring Boot backend.",
+      "Technologies Used": ["Java Spring Boot", "JWT", "PostgreSQL", "AWS S3", "RabbitMQ"],
+      "Hidden Skills": ["AI/ML Algorithm Design", "Cloud Platforms Expertise"]
+    },
+    {
+      "Title": "Hotel Finder",
+      "Description": "Full stack application integrating Google Maps API for hotel searches and reservations.",
+      "Technologies Used": ["Java Spring Boot", "Vue.js", "Google Maps API"],
+      "Hidden Skills": ["Front-End Development Expertise", "Back-End Development Expertise"]
+    },
+    {
+      "Title": "Airline Website",
+      "Description": "Mock website for an airline company with features like departure and arrival selection.",
+      "Technologies Used": ["HTML", "CSS", "JavaScript", "Java Spring Boot", "MS SQL Server"],
+      "Hidden Skills": ["Web Development Expertise"]
+    },
+    {
+      "Title": "WeatherApp",
+      "Description": "Microservices-based weather app integrating NASA’s API to provide real-time data.",
+      "Technologies Used": ["Go", "Ballerina", "NASA API"],
+      "Hidden Skills": ["API Integration Expertise"]
+    },
+    {
+      "Title": "Housing Price Predictor",
+      "Description": "Model used to determine house prices based on features.",
+      "Technologies Used": ["Python", "Scikit-learn"],
+      "Hidden Skills": ["Data Analysis Expertise", "Machine Learning Expertise"]
+    }
+  ],
+  "Other Achievements": [
+    {
+      "Title": "ICPC Competition",
+      "Details": "Competed in the International Collegiate Programming Contest (ICPC) for Technical University of
+Cluj-Napoca, eliminated at the National level in 2022."
+    },
+    {
+      "Title": "WiDS Datathon 2025",
+      "Details": "Participant in the Women in Data Science Datathon, results pending."
+    }
+  ]
+}
