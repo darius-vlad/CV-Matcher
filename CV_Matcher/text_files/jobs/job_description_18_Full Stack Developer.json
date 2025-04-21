@@ -1,0 +1,35 @@
+{
+  "Type": "Junior",
+  "Role": "Full Stack Developer",
+  "Company": "Tech Innovators Inc.",
+  "Responsibilities": [
+    "Collaborate with cross-functional teams to design, develop, and implement web applications.",
+    "Develop both front-end and back-end components of applications.",
+    "Write clean, scalable, and efficient code following best practices.",
+    "Participate in code reviews to maintain high-quality standards.",
+    "Troubleshoot and debug applications for optimal performance."
+  ],
+  "Required": [
+    "Bachelor’s degree in Computer Science, Information Technology, or a related field.",
+    "Basic understanding of front-end technologies such as HTML, CSS, and JavaScript.",
+    "Familiarity with back-end programming languages like Node.js, Python, or Java.",
+    "Knowledge of database systems such as MySQL, MongoDB, or PostgreSQL.",
+    "Strong problem-solving skills and attention to detail.",
+    "Ability to work effectively in a team environment and communicate technical concepts clearly."
+  ],
+  "Skills": {
+    "Frontend": ["HTML", "CSS", "JavaScript"],
+    "Backend": ["Node.js", "Python", "Java"],
+    "Databases": ["MySQL", "MongoDB", "PostgreSQL"],
+    "Version Control": ["Git"],
+    "DevOps": ["AWS", "Azure", "Google Cloud"]
+  },
+  "Benefits": [
+    "Competitive salary and performance-based bonuses.",
+    "Comprehensive health, dental, and vision insurance plans.",
+    "Opportunities for professional development and career advancement.",
+    "Flexible work hours and remote work options.",
+    "Generous paid time off and company holidays.",
+    "Access to cutting-edge technology and tools."
+  ]
+}

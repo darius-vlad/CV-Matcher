@@ -1,0 +1,33 @@
+{
+  "Type": "Junior",
+  "Role": ["Machine Learning Engineer", "Backend Developer"],
+  "Company": "InnovateTech Solutions",
+  "Responsibilities": [
+    "Develop and maintain robust backend systems for machine learning applications.",
+    "Collaborate with cross-functional teams to integrate ML models into production environments.",
+    "Optimize backend services for scalability and performance.",
+    "Implement RESTful APIs for seamless system communication.",
+    "Conduct code reviews and provide feedback on best practices."
+  ],
+  "Required": [
+    "Bachelor’s or Master’s degree in Computer Science, Engineering, or a related field.",
+    "Proven experience as a Backend Developer with a focus on machine learning applications.",
+    "Strong proficiency in programming languages such as Python, Java, or C++.",
+    "Experience with machine learning frameworks and libraries (e.g., TensorFlow, PyTorch, Scikit-learn).",
+    "Solid understanding of RESTful API design and database technologies (SQL, NoSQL).",
+    "Familiarity with cloud platforms (AWS, Google Cloud, Azure) for application deployment."
+  ],
+  "Skills": {
+    "Programming": ["Python", "Java", "C++"],
+    "Machine Learning": ["TensorFlow", "PyTorch", "Scikit-learn"],
+    "Cloud Platforms": ["AWS", "Google Cloud", "Azure"]
+  },
+  "Benefits": [
+    "Competitive salary and performance-based bonuses.",
+    "Comprehensive health, dental, and vision insurance plans.",
+    "Flexible work hours and remote work options.",
+    "Professional development opportunities and continuous learning.",
+    "Generous paid time off and holiday schedule.",
+    "Collaborative and inclusive work environment with a focus on work-life balance."
+  ]
+}
