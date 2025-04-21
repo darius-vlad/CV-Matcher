@@ -1,0 +1,34 @@
+{
+  "Type": "mid-level",
+  "Role": "SAP Developer",
+  "Company": "Tech Innovators Inc.",
+  "Responsibilities": [
+    "Develop and implement SAP applications/solutions to meet business requirements.",
+    "Collaborate with cross-functional teams to gather and analyze requirements, translating them into technical specifications.",
+    "Customize and configure SAP modules for seamless integration with existing systems.",
+    "Perform unit testing, integration testing, and support user acceptance testing to ensure high-quality deliverables.",
+    "Troubleshoot and resolve SAP-related issues, providing timely support and solutions."
+  ],
+  "Required": [
+    "Bachelor’s degree in Computer Science, Information Technology, or a related field.",
+    "3-5 years of experience in SAP development, including ABAP programming and SAP module customization.",
+    "Strong understanding of SAP modules such as SD, MM, FI/CO, or HR.",
+    "Proficiency in SAP development tools and methodologies.",
+    "Excellent problem-solving skills and attention to detail.",
+    "Strong communication and interpersonal skills with effective teamwork."
+  ],
+  "Skills": {
+    "SAP Development": ["ABAP", "S/4HANA", "Fiori"],
+    "Integration Technologies": ["PI/PO", "Cloud Platform"],
+    "Methodologies": ["Agile"]
+  },
+  "Benefits": [
+    "Competitive salary and performance-based bonuses.",
+    "Comprehensive health, dental, and vision insurance plans.",
+    "401(k) retirement plan with company matching.",
+    "Generous paid time off and holiday schedule.",
+    "Professional development opportunities and continuous learning.",
+    "Collaborative and inclusive company culture.",
+    "Flexible work arrangements including remote work options."
+  ]
+}

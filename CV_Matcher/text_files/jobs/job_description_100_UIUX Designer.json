@@ -1,0 +1,32 @@
+{
+  "Type": "senior",
+  "Role": "UI/UX Designer",
+  "Company": "InnovateTech Solutions",
+  "Responsibilities": [
+    "Lead the design and development of user interfaces and experiences for web and mobile applications.",
+    "Collaborate with cross-functional teams to translate business requirements into innovative design solutions.",
+    "Conduct user research and usability testing to validate design concepts.",
+    "Create wireframes, prototypes, and high-fidelity designs using industry-standard tools.",
+    "Mentor junior designers and foster a culture of continuous learning."
+  ],
+  "Required": [
+    "Bachelor’s degree in Design or Human-Computer Interaction.",
+    "Minimum 5 years of UI/UX design experience with a diverse portfolio.",
+    "Proficiency in Adobe Creative Suite, Sketch, Figma, etc.",
+    "Strong understanding of user-centered design principles.",
+    "Excellent communication and presentation skills."
+  ],
+  "Skills": {
+    "Programming": ["HTML", "CSS", "JavaScript"],
+    "Design Tools": ["Sketch", "Figma", "Adobe Creative Suite"],
+    "User Research": ["Usability testing", "user feedback analysis"]
+  },
+  "Benefits": [
+    "Competitive salary and performance-based bonuses.",
+    "Comprehensive health, dental, and vision insurance.",
+    "Flexible work hours and remote work options.",
+    "Professional development opportunities.",
+    "Generous paid time off and holiday schedule.",
+    "Collaborative and inclusive company culture."
+  ]
+}
