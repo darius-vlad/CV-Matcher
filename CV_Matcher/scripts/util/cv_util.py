@@ -6,15 +6,14 @@ from google.genai import types
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from scripts.util.json_parser import summary_cv_and_write_files
+from scripts.util.json_parser import summary_cv
 from scripts.util.vector_embedding_util import embed_json, calc_sim_measure
 
 import pandas as pd
 
-
 def process_cv(cv, df_job_embeddings):
     # convert cv docx to json
-    cv_json = summary_cv_and_write_files(cv)
+    cv_json = summary_cv(cv)
     # create vector embedding for cv
     df_cv_embedding = embed_json(cv_json)
     # calculate sim measure

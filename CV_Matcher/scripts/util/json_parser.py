@@ -1,7 +1,7 @@
 import ollama
 import re
 
-def summary_cv_and_write_files(cv_text):
+def summary_cv(cv_text):
     model = 'deepseek-r1:8b_vram'
     prompt = """
 You are a CV-to-JSON converter. Transform input CVs into JSON format following these rules:
@@ -110,4 +110,4 @@ Project Experience
 2. **Real-time Data Analytics Platform**
    Created a real-time data analytics platform leveraging Python and Django for the backend, with PostgreSQL as the database to manage large datasets efficiently. Utilized ReactJS and TypeScript to build a dynamic and interactive user interface. Integrated AWS services for cloud storage and Docker for containerization, enabling smooth deployment and scalability. Technologies and tools used: Python, Django, PostgreSQL, ReactJS, TypeScript, AWS, Docker.
     """
-    print(summary_cv_and_write_files(cv_text))
+    print(summary_cv(cv_text))
