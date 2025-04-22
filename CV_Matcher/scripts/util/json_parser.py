@@ -80,7 +80,7 @@ The text:
                .strip())
     return summary
 
-def summary_jobs(job_text):
+def summary_job(job_text):
     model = 'deepseek-r1:8b_vram'
     prompt = """Act as a job post parser. Analyze the provided job description and return a structured JSON output in the following format:  
 {  
@@ -202,4 +202,4 @@ Benefits:
 - Opportunities for professional development and continuous learning.
 - Generous paid time off and holiday schedule.
 - Collaborative and inclusive work environment with a focus on work-life balance."""
-    print(summary_jobs(job_text))
+    print(summary_job(job_text))

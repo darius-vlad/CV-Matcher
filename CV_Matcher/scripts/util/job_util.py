@@ -1,4 +1,4 @@
-
+from scripts.util.json_parser import summary_job
 from scripts.util.vector_embedding_util import embed_json, calc_sim_measure
 
 def process_job(df_cv_embedding, job):
