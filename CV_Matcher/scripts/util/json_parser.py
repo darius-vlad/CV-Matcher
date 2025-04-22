@@ -1,16 +1,7 @@
-from google import genai
-from google.genai import types
-
-from docx import Document
-import glob
-
-from IPython.display import Markdown, display
 import ollama
-import time
-import os
 import re
 
-def summary_cv_and_write_files(cvs, amount=500):
+def summary_cv_and_write_files(cv_text):
     model = 'deepseek-r1:8b_vram'
     prompt = """
 You are a CV-to-JSON converter. Transform input CVs into JSON format following these rules:
@@ -74,41 +65,49 @@ You are a CV-to-JSON converter. Transform input CVs into JSON format following t
 DO NOT ADD ANYTHING ELSE, STRICTLY FOLLOW THE OUTPUT EXAMPLE.
 The text:
 """
-    if not os.path.exists('text_files'):
-        os.makedirs('text_files', exist_ok=True)
 
-    if not os.path.exists('text_files/candidates'):
-        os.makedirs('text_files/candidates', exist_ok=True)
+    response = ollama.chat(
+        model=model,
+        # options={'keep_alive': '-1'},
+        messages=[
+            {'role': 'user', 'content': f"{prompt} {cv_text}"},
+        ])
+    # remove the entire <think>...<./think> section
+    summary = (re.sub(r'<think\s*>.*?</think\s*>', '', response['message']['content'], flags=re.DOTALL)
+               .replace('*', '')
+               .replace('```json', '')
+               .replace('```', '')
+               .strip())
+    return summary
 
-    for index, (key, value) in enumerate(cvs.items()):
-        if index >= amount:
-            break
+if __name__ == '__main__':
+    # Example CV text
+    cv_text = """
+Andrei Mihailescu
+Technical Skills
+- JavaScript, ReactJS, Node.js, SQL
+- HTML, CSS, Bootstrap, AngularJS
+- Python, Django, PostgreSQL, REST APIs
+- TypeScript, VueJS, AWS, Docker
+- Java, Spring Boot, OracleSQL, Kubernetes
+Foreign Languages
+- English: C1
+- Spanish: B1
+- French: A2
+Education
+- University Name: Politehnica University of Bucharest
+- Program Duration: 4 years
+- Master Degree Name: Politehnica University of Bucharest
+- Program Duration: 2 years
+Certifications
+- AWS Certified Solutions Architect – Associate
+- Certified Kubernetes Administrator (CKA)
+- Oracle Certified Professional, Java SE 11 Developer
+Project Experience
+1. **Inventory Management System**
+   Developed a robust inventory management system using Java and Spring Boot for the backend, with an OracleSQL database to handle complex queries and data storage. Implemented REST APIs to facilitate seamless communication between the backend and a responsive frontend built with AngularJS and Bootstrap. Deployed the application on a Kubernetes cluster, ensuring scalability and high availability. Technologies and tools used: Java, Spring Boot, OracleSQL, AngularJS, Bootstrap, Kubernetes.
 
-        start_time = time.time()
-        print(f'Generating summary for {key}')
-        response = ollama.chat(
-            model=model,
-            # options={'keep_alive': '-1'},
-            messages=[
-                {'role': 'user', 'content': f"{prompt} {value}"},
-            ]
-        )
-
-        # remove the entire <think>...<./think> section
-        summary = (re.sub(r'<think\s*>.*?</think\s*>', '', response['message']['content'], flags=re.DOTALL)
-                   .replace('*', '')
-                   .replace('```json', '')
-                   .replace('```', '')
-                   .strip()
-                   )
-        file_name = key.replace('DataSet/cv\\', '').replace('.docx', '').strip()
-        print(f'Writing summary to file: {file_name}')
-        try:
-            with open(f'text_files/candidates/{file_name}.json', 'w', encoding='utf-8') as f:
-                f.write(summary)
-        except Exception as e:
-            print(f"Error writing file {file_name}: {e}")
-
-        end_time = time.time()
-        overall_time = end_time - start_time
-        print(f"Overall time for {file_name}: {overall_time:.2f} seconds")
+2. **Real-time Data Analytics Platform**
+   Created a real-time data analytics platform leveraging Python and Django for the backend, with PostgreSQL as the database to manage large datasets efficiently. Utilized ReactJS and TypeScript to build a dynamic and interactive user interface. Integrated AWS services for cloud storage and Docker for containerization, enabling smooth deployment and scalability. Technologies and tools used: Python, Django, PostgreSQL, ReactJS, TypeScript, AWS, Docker.
+    """
+    print(summary_cv_and_write_files(cv_text))
