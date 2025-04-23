@@ -4,6 +4,8 @@ import scripts.repo.filebase_repo as filebase
 import scripts.service.cv_service as cv_service
 import scripts.service.job_service as job_service
 
+import scripts.util.json_parser as json_parser # delete after test
+
 HOST, PORT = 'localhost', 6379
 CV_QUEUE   = 'queue:cvs'
 JOB_QUEUE  = 'queue:jobs'
@@ -27,7 +29,11 @@ async def process_cv(data: bytes):
         file = f'cv-raw/{data.decode('utf-8')}'
         print("Process CV:", file)
         cv = filebase.get_object(file)
-        cv_service.add_cvs(cv)
+        #cv_service.add_cvs(cv)
+        json = json_parser.summary_cv(cv)
+
+        file_insert = f'cv-processed/{data.decode('utf-8')}.json'
+        filebase.put_object(file_insert, json)
     except Exception as e:
         print(f"Error processing CV: {e}")
 
@@ -36,7 +42,11 @@ async def process_job(data: bytes):
         file = f'jobs/{data.decode('utf-8')}'
         print("Process Job:", file)
         job = filebase.get_object(file)
-        job_service.add_jobs(job)
+        #job_service.add_jobs(job)
+
+        json = json_parser.summary_job(job)
+        print(json)
+
     except Exception as e:
         print(f"Error processing Job: {e}")
 

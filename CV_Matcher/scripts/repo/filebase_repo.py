@@ -45,6 +45,16 @@ def get_object(key: str) -> str:
         print(f"S3 ClientError [{code}]: {msg}")
         return None
 
+def put_object(key: str, content: str) -> None:
+    try:
+        if not key.endswith(".json"):
+            key += ".json"
+        s3.put_object(Bucket=S3_BUCKET_NAME, Key=key, Body=content, ContentType="application/json")
+    except ClientError as err:
+        code = err.response["Error"]["Code"]
+        msg  = err.response["Error"]["Message"]
+        print(f"S3 ClientError [{code}]: {msg}")
+
 if __name__ == "__main__":
     object_key = "cv-raw/0a0d3536-dfec-483e-8cce-3aef7ed9bad5.docx"
     content = get_object(object_key)
