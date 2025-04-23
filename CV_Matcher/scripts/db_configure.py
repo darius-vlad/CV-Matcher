@@ -4,7 +4,7 @@ from psycopg2 import sql
 DB_CONFIG = {
     "dbname": "CV_Matcher",
     "user": "postgres",
-    "password": "changeme",
+    "password": "omega1234",
     "host": "localhost",
     "port": "5432"
 }
@@ -15,13 +15,13 @@ def create_tables():
     commands = (
         """
         CREATE TABLE IF NOT EXISTS cv_embeddings (
-            cv_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             embedding FLOAT[] NOT NULL
         )
         """,
         """
         CREATE TABLE IF NOT EXISTS job_embeddings (
-            job_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             embedding FLOAT[] NOT NULL
         )
         """
@@ -41,7 +41,7 @@ def create_tables():
         cursor.execute("""
             SELECT table_name 
             FROM information_schema.tables 
-            WHERE table_name IN ('cv_embeddings', 'job_embeddings', 'similarity_matrix')
+            WHERE table_name IN ('cv_embeddings', 'job_embeddings')
         """)
         print("Created tables:", [row[0] for row in cursor.fetchall()])
 

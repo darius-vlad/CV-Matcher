@@ -1,6 +1,5 @@
-# import parser_util
-# import semantic_sim_util
+import asyncio
+from scripts.repo.redis_repo import main
 
-def add_job(jobs): # actual docx/pdf (may also be text) file
-
-    pass
+if __name__ == '__main__':
+    asyncio.run(main())
