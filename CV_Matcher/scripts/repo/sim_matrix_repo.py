@@ -27,7 +27,9 @@ def insert_new_row(conn: connection, new_a_id: int, similarities_df: pd.DataFram
         if len(similarities_df) != 1:
             raise ValueError("DataFrame must contain exactly one row")
 
-        if list(similarities_df.columns) != b_columns:
+        if list(similarities_df.columns) != list(map(int,b_columns)):
+            print(list(similarities_df.columns))
+            print(list(map(int,b_columns)))
             raise ValueError(f"DataFrame columns must match B columns in order: {b_columns}")
 
         # Prepare values
