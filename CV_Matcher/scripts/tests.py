@@ -42,7 +42,7 @@ def test_save_jobs():
     _, job_texts = read_folder('../DataSet/job')
     add_jobs(job_texts)
 def test_save_cvs():
-    _, cv_texts = read_folder('../DataSet/cv', 2)
+    _, cv_texts = read_folder('../DataSet/cv', 3)
     add_cvs(cv_texts)
 
 test_save_cvs()
