@@ -34,7 +34,7 @@ def insert_new_row(conn: connection, new_a_id: int, similarities_df: pd.DataFram
 
         # Prepare values
         values = [new_a_id] + similarities_df.iloc[0].tolist()
-        columns_str = ', '.join(['id'] + b_columns)
+        columns_str = ', '.join(['\"id\"'] + list(map(lambda x: '\"' + x + '\"', b_columns)))
         placeholders = ', '.join(['%s'] * (len(b_columns) + 1))
 
         # Create and execute INSERT query

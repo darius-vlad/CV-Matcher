@@ -11,7 +11,6 @@ from scripts.util.cv_util import process_cv
 def add_cvs(cvs): # actual texts form docx/pdf files
     # retrieve all JOB vector embeddings
     job_vector_embeddings = get_jobs_df()
-    id = 1
     for cv in cvs:
         cv_embedding, sim_measures, json_cv = process_cv(cv, job_vector_embeddings)
         sns.heatmap(sim_measures, cmap='Greens')
@@ -20,5 +19,4 @@ def add_cvs(cvs): # actual texts form docx/pdf files
         # save cv_vector_embedding in db
         save_cv_embeddings(cv_embedding)
         # insert new sim_measure 'row'
-        insert_new_row(get_connection(), id, sim_measures)
-        id += 1
+        insert_new_row(get_connection(), 10, sim_measures)

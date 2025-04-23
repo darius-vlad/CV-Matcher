@@ -5,13 +5,13 @@ import pandas as pd
 GOOGLE_API_KEY = 'AIzaSyB5c78qm-K4J7U5xjpQwgsPxhH6YGMqPyo'
 client = genai.Client(api_key=GOOGLE_API_KEY)
 
-def embed_json(json):
+def embed_json(json: str, id: int):
     embedding = client.models.embed_content(
         model='models/text-embedding-004',
         contents=[json],
         config=types.EmbedContentConfig(task_type='semantic_similarity'))
 
-    df_embedding = pd.DataFrame([e.values for e in embedding.embeddings], index=[i for i in range(0, 1)])
+    df_embedding = pd.DataFrame([e.values for e in embedding.embeddings], index=[i for i in range(id, id+1)])
     return df_embedding
 
 def calc_sim_measure(df_cv, df_job):
