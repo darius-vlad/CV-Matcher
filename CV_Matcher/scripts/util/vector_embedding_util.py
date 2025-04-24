@@ -15,5 +15,9 @@ def embed_json(json: str, id: int):
     return df_embedding
 
 def calc_sim_measure(df_cv, df_job):
+    print("df_cv")
+    print(df_cv)
+    print("df_job")
+    print(df_job)
     sim = df_cv @ df_job.T
     return sim

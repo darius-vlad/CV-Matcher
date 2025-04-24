@@ -12,7 +12,7 @@ from scripts.util.vector_embedding_util import embed_json, calc_sim_measure
 
 import pandas as pd
 
-def process_cv(cv, df_job_embeddings):
+def process_cv(cv, df_job_embeddings, id):
     # convert cv docx to json
     # TODO: sumary teh actual cv and remove placeholder
     cv_json = """
@@ -102,7 +102,7 @@ Cluj-Napoca, eliminated at the National level in 2022."
     cv_json = summary_cv(cv)
     print(cv_json)
     # create vector embedding for cv
-    df_cv_embedding = embed_json(cv_json)
+    df_cv_embedding = embed_json(cv_json, id)
     # calculate sim measure
     new_sims = calc_sim_measure(df_cv_embedding, df_job_embeddings)
     # return cv_vector_embedding, sim_measure

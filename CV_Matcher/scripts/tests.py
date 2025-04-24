@@ -4,7 +4,6 @@ import glob
 from scripts.service.cv_service import add_cvs
 from scripts.service.job_service import add_jobs
 
-
 def extract_text_from_docx(file_path):
     """Extract text from a .docx file, including paragraphs and tables."""
     doc = Document(file_path)
@@ -39,10 +38,11 @@ def read_folder(folder_path, elements_num = -1):
 
     return ids_array, text_array
 def test_save_jobs():
-    _, job_texts = read_folder('../DataSet/job')
+    _, job_texts = read_folder('../DataSet/job', 2)
     add_jobs(job_texts)
 def test_save_cvs():
     _, cv_texts = read_folder('../DataSet/cv', 3)
     add_cvs(cv_texts)
 
-test_save_cvs()
+# test_save_cvs()
+test_save_jobs()

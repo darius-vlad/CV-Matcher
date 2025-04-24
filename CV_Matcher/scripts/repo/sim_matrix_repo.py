@@ -52,43 +52,43 @@ def insert_new_column(conn: connection, new_b_id: str, similarities_df: pd.DataF
 
     :param conn: PostgreSQL database connection object
     :param new_b_id: Name/ID of the new B element (column name)
-    :param similarities_df: DataFrame with single row containing similarity scores to each A element
+    :param similarities_df: DataFrame with single column containing similarity scores
     """
     with conn.cursor() as cursor:
         # Basic column name validation
-        if not new_b_id.isidentifier():
-            raise ValueError("Invalid column name")
+        # if not new_b_id.isidentifier():
+        #     raise ValueError("Invalid column name")
 
-        # Get existing A element IDs in order
-        cursor.execute("SELECT a_id FROM sim_matrix ORDER BY a_id;")
-        a_ids = [row[0] for row in cursor.fetchall()]
+        # Get existing element IDs in order
+        cursor.execute("SELECT id FROM sim_matrix ORDER BY id;")
+        ids = [row[0] for row in cursor.fetchall()]
 
         # Validate DataFrame structure
-        if len(similarities_df) != 1:
-            raise ValueError("DataFrame must contain exactly one row")
+        if len(similarities_df.columns) != 1:
+            raise ValueError("DataFrame must contain exactly one column")
 
-        if len(similarities_df.columns) != len(a_ids):
-            raise ValueError(f"Need {len(a_ids)} similarity scores, got {len(similarities_df.columns)}")
+        if len(similarities_df) != len(ids):
+            raise ValueError(f"Need {len(ids)} similarity scores, got {len(similarities_df)}")
 
-        # Add new column
+        # Add new column if it doesn't exist
         cursor.execute(
-            sql.SQL("ALTER TABLE sim_matrix ADD COLUMN {} REAL").format(
+            sql.SQL("ALTER TABLE sim_matrix ADD COLUMN IF NOT EXISTS {} DOUBLE PRECISION").format(
                 sql.Identifier(new_b_id)
             )
         )
 
         # Prepare UPDATE statements
-        similarities = similarities_df.iloc[0].tolist()
+        similarities = similarities_df.iloc[:, 0].tolist()  # Get first column values
         update_template = """
             UPDATE sim_matrix 
             SET {} = %s 
-            WHERE a_id = %s;
+            WHERE id = %s;
         """
 
         # Update each row with corresponding similarity score
-        for a_id, similarity in zip(a_ids, similarities):
+        for id, similarity in zip(ids, similarities):
             cursor.execute(
                 sql.SQL(update_template).format(sql.Identifier(new_b_id)),
-                (similarity, a_id)
+                (similarity, id)
             )
     conn.commit()
