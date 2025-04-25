@@ -5,8 +5,24 @@ if (-not (Test-Path -Path $configFolder)) {
     New-Item -Path $configFolder -ItemType Directory | Out-Null
 }
 
-ollama rm deepseek-r1:8b_vram
-ollama rm deepseek-r1:7b_vram
+ollama rm deepseek-r1:1.5b_vram
+# ollama rm deepseek-r1:7b_vram
+# ollama rm deepseek-r1:8b_vram
+
+# ----------------------------------------------------------
+# Modelul deepseek-r1:1.5b_vram
+# ----------------------------------------------------------
+$modelfile7b = @"
+FROM deepseek-r1:1.5b
+PARAMETER num_gpu 32
+PARAMETER num_ctx 1024
+"@
+
+$7bPath = Join-Path -Path $configFolder -ChildPath "deepseek_7b_vram.modelfile"
+Set-Content -Path $7bPath -Value $modelfile7b
+
+Write-Host "Creating 7B model from: $(Resolve-Path $7bPath)" -ForegroundColor Cyan
+ollama create deepseek-r1:1.5b_vram -f $7bPath
 
 # ----------------------------------------------------------
 # Modelul deepseek-r1:7b_vram
