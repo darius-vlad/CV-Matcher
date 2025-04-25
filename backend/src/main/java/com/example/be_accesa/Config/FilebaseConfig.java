@@ -27,8 +27,7 @@ public class FilebaseConfig {
 
     @Bean
     public AmazonS3 amazonS3() {
-
-
+        System.setProperty("aws.java.v1.disableDeprecationAnnouncement", "true");
         BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
         return AmazonS3ClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))

@@ -37,34 +37,26 @@ public class Controller {
         Map<String, String> map = new HashMap<>();
 
         for(MultipartFile file : files) {
-            // calculate file hash
             String cvHash = FileHasher.hashMultipartFile(file);
             if(cvHash == null){
                 return ResponseEntity.badRequest().body("Error hashing cv " + file.getOriginalFilename());
             }
             CvHash newCvHash;
-            // check if file hash exists
             try{
-            //  if no error insert into PG DB and get the newly assigned id
                 newCvHash = cvHashService.save(cvHash);
             } catch (Exception e){
-            // else SKIP
                 // TODO: handle multiple different exceptions
                 continue;
             }
-            // set the cvId = "cv-raw/" + id.toString() + ".docx"
-
-//            String cvId = "cv-raw/" + UUID.randomUUID().toString() + ".docx";
-            String cvId = "cv-raw/" + newCvHash.getId().toString() + ".docx";
-
+            String fileHashed = newCvHash.getId().toString() + ".docx";
+            String cvId = "cv-raw/" + fileHashed;
             if(!filebaseService.uploadFile(cvId, file)) {
                 return ResponseEntity.badRequest().body("Error uploading raw cv " + file.getOriginalFilename());
             }
 
-            if(!redisService.enqueueCvId(cvId)) {
+            if(!redisService.enqueueCvId(fileHashed)) {
                 return ResponseEntity.badRequest().body("Error adding cv id to queue" + file.getOriginalFilename());
             }
-
             map.put(file.getOriginalFilename(), cvId);
         }
 
