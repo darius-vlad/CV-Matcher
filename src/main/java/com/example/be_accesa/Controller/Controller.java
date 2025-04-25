@@ -32,6 +32,12 @@ public class Controller {
         Map<String, String> map = new HashMap<>();
 
         for(MultipartFile file : files) {
+            // calculate file hash
+            // check if file hash exists
+            //      if it does SKIP
+            //      else insert into PG DB and get the newly assigned id
+            // set the cvId = "cv-raw/" + id.toString() + ".docx"
+
             String cvId = "cv-raw/" + UUID.randomUUID().toString() + ".docx";
 
             if(!filebaseService.uploadFile(cvId, file)) {

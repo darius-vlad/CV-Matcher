@@ -1,0 +1,7 @@
+BE:
+  - Trimitere catre Redis & FileBase cu nume INT (pentru indexare)
+  - Def EndPoint pt retrieve la TOATE joburile
+  - Def EndPoint pt retrieve ranking la un anumit job
+  - ACK prin Redis pentru responsiveness
+  - Verificare de CV-uri INDENTICE
+  - Candidate profiling
