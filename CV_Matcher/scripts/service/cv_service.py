@@ -8,8 +8,6 @@ from scripts.repo.job_repo import get_jobs_df
 from scripts.repo.sim_matrix_repo import insert_new_row
 from scripts.util.cv_util import process_cv
 
-id = 10
-
 def add_cvs(cvs): # actual texts form docx/pdf files
     # retrieve all JOB vector embeddings
     job_vector_embeddings = get_jobs_df()

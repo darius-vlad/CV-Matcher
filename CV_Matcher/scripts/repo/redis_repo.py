@@ -1,10 +1,11 @@
 import asyncio
 import redis.asyncio as redis
 import scripts.repo.filebase_repo as filebase
-import scripts.service.cv_service as cv_service
-import scripts.service.job_service as job_service
-
-import scripts.util.json_parser as json_parser # delete after test
+from scripts.repo.cv_repo import save_cv_embeddings
+from scripts.repo.job_repo import get_jobs_df
+from scripts.repo.sim_matrix_repo import insert_new_row
+from scripts.util import cv_util
+from scripts.repo.abstract_file_repo import get_connection
 
 HOST, PORT = 'localhost', 6379
 CV_QUEUE   = 'queue:cvs'
@@ -28,12 +29,20 @@ async def process_cv(data: bytes):
     try:
         file = f'cv-raw/{data.decode('utf-8')}'
         print("Process CV:", file)
+        print('CV: ' + data.decode('utf-8'))
         cv = filebase.get_object(file)
-        #cv_service.add_cvs(cv)
-        json = json_parser.summary_cv(cv)
+
+        cv_id = int(data.decode('utf-8').split('.')[0])
+        # TODO: cache job_vector_embeddings for better performance
+        job_vector_embeddings = get_jobs_df()
+        cv_embedding, sim_measures, json_cv = cv_util.process_cv(cv, job_vector_embeddings, cv_id)
+        # save cv_vector_embedding in db
+        save_cv_embeddings(cv_embedding)
+        # insert new sim_measure 'row'
+        insert_new_row(get_connection(), cv_id, sim_measures)
 
         file_insert = f'cv-processed/{data.decode('utf-8')}.json'
-        filebase.put_object(file_insert, json)
+        filebase.put_object(file_insert, json_cv)
     except Exception as e:
         print(f"Error processing CV: {e}")
 
@@ -44,8 +53,8 @@ async def process_job(data: bytes):
         job = filebase.get_object(file)
         #job_service.add_jobs(job)
 
-        json = json_parser.summary_job(job)
-        print(json)
+        # json = json_parser.summary_job(job)
+        # print(json)
 
     except Exception as e:
         print(f"Error processing Job: {e}")
