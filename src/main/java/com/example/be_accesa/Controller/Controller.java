@@ -1,8 +1,11 @@
 package com.example.be_accesa.Controller;
 
 import com.example.be_accesa.DTO.CvDTO;
+import com.example.be_accesa.Model.CvHash;
+import com.example.be_accesa.Service.CvHashService;
 import com.example.be_accesa.Service.FilebaseService;
 import com.example.be_accesa.Service.RedisService;
+import com.example.be_accesa.Utils.FileHasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +22,14 @@ public class Controller {
 
     private final FilebaseService filebaseService;
     private final RedisService redisService;
+    private final CvHashService cvHashService;
 
     @Autowired
     public Controller(FilebaseService filebaseService,
-                      RedisService redisService) {
+                      RedisService redisService, CvHashService cvHashService) {
         this.filebaseService = filebaseService;
         this.redisService = redisService;
+        this.cvHashService = cvHashService;
     }
 
     @PostMapping("/upload-batch")
@@ -33,12 +38,24 @@ public class Controller {
 
         for(MultipartFile file : files) {
             // calculate file hash
+            String cvHash = FileHasher.hashMultipartFile(file);
+            if(cvHash == null){
+                return ResponseEntity.badRequest().body("Error hashing cv " + file.getOriginalFilename());
+            }
+            CvHash newCvHash;
             // check if file hash exists
-            //      if it does SKIP
-            //      else insert into PG DB and get the newly assigned id
+            try{
+            //  if no error insert into PG DB and get the newly assigned id
+                newCvHash = cvHashService.save(cvHash);
+            } catch (Exception e){
+            // else SKIP
+                // TODO: handle multiple different exceptions
+                continue;
+            }
             // set the cvId = "cv-raw/" + id.toString() + ".docx"
 
-            String cvId = "cv-raw/" + UUID.randomUUID().toString() + ".docx";
+//            String cvId = "cv-raw/" + UUID.randomUUID().toString() + ".docx";
+            String cvId = "cv-raw/" + newCvHash.getId().toString() + ".docx";
 
             if(!filebaseService.uploadFile(cvId, file)) {
                 return ResponseEntity.badRequest().body("Error uploading raw cv " + file.getOriginalFilename());

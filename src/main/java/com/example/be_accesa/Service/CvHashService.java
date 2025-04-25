@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CvHashService {
-    private ICvHashRepo cvRepo;
+    private final ICvHashRepo cvRepo;
 
     @Autowired
     public CvHashService(ICvHashRepo cvRepo){
         this.cvRepo = cvRepo;
     }
 
-    public CvHash add(CvHash cvHash){
-        return cvRepo.save(cvHash);
+    public CvHash save(String fileHash){
+        return cvRepo.save(new CvHash(fileHash));
     }
 }
