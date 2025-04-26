@@ -9,4 +9,4 @@ def process_job(df_cv_embeddings, job, job_id):
     # calculate sim measure
     new_sims = calc_sim_measure(df_cv_embeddings, df_job_embedding)
     # return cv_vector_embedding, sim_measure
-    return df_job_embedding, new_sims
+    return df_job_embedding, new_sims, job_json

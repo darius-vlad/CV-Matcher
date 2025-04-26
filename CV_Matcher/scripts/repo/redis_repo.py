@@ -1,10 +1,10 @@
 import asyncio
 import redis.asyncio as redis
 import scripts.repo.filebase_repo as filebase
-from scripts.repo.cv_repo import save_cv_embeddings
-from scripts.repo.job_repo import get_jobs_df
+from scripts.repo.cv_repo import save_cv_embeddings, get_cvs_df
+from scripts.repo.job_repo import get_jobs_df, save_job_embeddings
 from scripts.repo.sim_matrix_repo import insert_new_row
-from scripts.util import cv_util
+from scripts.util import cv_util, job_util
 from scripts.repo.abstract_file_repo import get_connection
 
 HOST, PORT = 'localhost', 6379
@@ -39,7 +39,8 @@ async def process_cv(data: bytes):
         # save cv_vector_embedding in db
         save_cv_embeddings(cv_embedding)
         # insert new sim_measure 'row'
-        insert_new_row(get_connection(), cv_id, sim_measures)
+        if sim_measures is not None:
+            insert_new_row(get_connection(), cv_id, sim_measures)
 
         file_insert = f'cv-processed/{data.decode('utf-8')}.json'
         filebase.put_object(file_insert, json_cv)
@@ -48,13 +49,22 @@ async def process_cv(data: bytes):
 
 async def process_job(data: bytes):
     try:
-        file = f'jobs/{data.decode('utf-8')}'
-        print("Process Job:", file)
+        file = f'job-raw/{data.decode('utf-8')}'
+        print("Process job:", file)
+        print('job: ' + data.decode('utf-8'))
         job = filebase.get_object(file)
-        #job_service.add_jobs(job)
 
-        # json = json_parser.summary_job(job)
-        # print(json)
+        job_id = int(data.decode('utf-8').split('.')[0])
+        # TODO: cache cv_vector_embeddings for better performance
+        cv_vector_embeddings = get_cvs_df()
+        job_embedding, sim_measures, json_job = job_util.process_job(cv_vector_embeddings, job, job_id)
+        # save job_vector_embedding in db
+        save_job_embeddings(job_embedding)
+        # insert new sim_measure 'row'
+        insert_new_row(get_connection(), job_id, sim_measures)
+
+        file_insert = f'job-processed/{data.decode('utf-8')}.json'
+        filebase.put_object(file_insert, json_job)
 
     except Exception as e:
         print(f"Error processing Job: {e}")
