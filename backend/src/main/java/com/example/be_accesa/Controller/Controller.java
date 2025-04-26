@@ -5,6 +5,9 @@ import com.example.be_accesa.Model.CvHash;
 import com.example.be_accesa.Model.JobHash;
 import com.example.be_accesa.Service.*;
 import com.example.be_accesa.Utils.FileHasher;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,18 +25,21 @@ public class Controller {
     private final RedisService redisService;
     private final CvHashService cvHashService;
     private final JobHashService jobHashService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
     public Controller(FilebaseService filebaseService,
                       PGService pgService,
                       RedisService redisService,
                       CvHashService cvHashService,
-                      JobHashService jobHashService) {
+                      JobHashService jobHashService,
+                      ObjectMapper objectMapper) {
         this.filebaseService = filebaseService;
         this.pgService = pgService;
         this.redisService = redisService;
         this.cvHashService = cvHashService;
         this.jobHashService = jobHashService;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping("/upload-cv-batch")
@@ -112,12 +118,12 @@ public class Controller {
 
     @GetMapping("/get-job-top")
     public ResponseEntity<Object> getJobTopCv(@RequestParam("jobId") Long jobId, @RequestParam("limit") int limit) {
-        List<String> cvList = new ArrayList<>();
+        List<Map<String, String>> cvList = new ArrayList<>();
 
         List<CvSimilarityDTO> topCvList = pgService.getTopCvForJobId(jobId, limit);
 
         for(CvSimilarityDTO cv : topCvList) {
-            String cvId = cv.getId() + ".docx";
+            String cvId = "cv-processed/" + cv.getId() + ".json";
 
             byte[] cvJsonBytes = filebaseService.getFile(cvId);
 
@@ -125,9 +131,14 @@ public class Controller {
                 return ResponseEntity.badRequest().body("Error fetching cv with id " + cvId);
             }
 
-            String cvJson = new String(cvJsonBytes, StandardCharsets.UTF_8);
+            String cvJsonString = new String(cvJsonBytes, StandardCharsets.UTF_8);
 
-            cvList.add(cvJson);
+            try {
+                Map<String, String> cvJsonMapped = objectMapper.readValue(cvJsonString, Map.class);
+                cvList.add(cvJsonMapped);
+            } catch (JsonProcessingException e) {
+                // TODO : handle different multiple exceptions
+            }
         }
 
         return ResponseEntity.ok(cvList);
