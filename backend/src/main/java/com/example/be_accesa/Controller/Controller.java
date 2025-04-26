@@ -100,7 +100,7 @@ public class Controller {
             }
 
             String fileHashed = newJobHash.getId().toString() + ".docx";
-            String jobId = "jobs/" + fileHashed;
+            String jobId = "job-raw/" + fileHashed;
 
             if(!filebaseService.uploadFile(jobId, file)) {
                 return ResponseEntity.badRequest().body("Error uploading raw job " + file.getOriginalFilename());
@@ -123,7 +123,7 @@ public class Controller {
         List<CvSimilarityDTO> topCvList = pgService.getTopCvForJobId(jobId, limit);
 
         for(CvSimilarityDTO cv : topCvList) {
-            String cvId = "cv-processed/" + cv.getId() + ".json";
+            String cvId = "cv-processed/" + cv.getId() + ".docx.json";
 
             byte[] cvJsonBytes = filebaseService.getFile(cvId);
 
