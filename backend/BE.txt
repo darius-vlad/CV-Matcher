@@ -1,7 +1,7 @@
 BE:
-  - Trimitere catre Redis & FileBase cu nume INT (pentru indexare)
   - Def EndPoint pt retrieve la TOATE joburile
-  - Def EndPoint pt retrieve ranking la un anumit job
-  - ACK prin Redis pentru responsiveness
-  - Verificare de CV-uri INDENTICE
-  - Candidate profiling
+  - ACK prin Redis pentru responsiveness (trimis raspuns inapoi prin redis la back-end pentru confirmare ca a procesat)
+  - trebuie luat fisierul procesat si pus in baza de date relational (json -> tabel) apoi sters fisierul din filebase
+  - Candidate profiling (daca are mai multe cv-uri...)
+  - fail-guard (in caz de fisierul da fail in orice etapa, de la back-end pana la ai) sa stergi ramasitele fisierului din bazele de date (filebase + postgres)
+  - optional : refactorizat clasa de controller si repository(pentru controller spargem in CvController si JobController)
