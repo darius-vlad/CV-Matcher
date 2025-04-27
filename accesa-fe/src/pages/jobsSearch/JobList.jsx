@@ -1,40 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import JobCard from '../../components/jobCard/JobCard';
-import SearchBar from '../../components/searchBar/Searchbar';
-import styles from './JobList.module.css';
+import React, { useEffect, useState } from "react";
+import JobCard from "../../components/jobCard/JobCard";
+import SearchBar from "../../components/searchBar/Searchbar";
+import styles from "./JobList.module.css";
 
 const JobList = () => {
   const [jobs, setJobs] = useState([]);
-  const [filteredJobs, setFilteredJobs] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/get-all-jobs');
+        const response = await fetch("http://localhost:8080/api/get-all-jobs");
         const data = await response.json();
-        console.log(data)
         setJobs(data);
-        setFilteredJobs(data);
       } catch (err) {
-        console.error('Error fetching jobs:', err);
+        console.error("Error fetching jobs:", err);
       }
     };
 
     fetchJobs();
   }, []);
 
+  const deleteJob = (jobId) => {
+    setJobs(prevJobs => prevJobs.filter(job => job.id !== jobId));
+  };
+
   const handleSearch = (term) => {
     setSearchTerm(term);
-
-    const filtered = jobs.filter(
-      (job) =>
-        job.Role.toLowerCase().includes(term.toLowerCase()) ||
-        job.Company.toLowerCase().includes(term.toLowerCase())
-    );
-
-    setFilteredJobs(filtered);
   };
+
+  const getFilteredJobs = () => {
+    if (!searchTerm) {
+      return jobs;
+    }
+
+    return jobs.filter(
+      (job) =>
+        job.Role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.Company.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
+
+  const filteredJobs = getFilteredJobs();
 
   return (
     <div className={styles.jobListContainer}>
@@ -42,9 +49,11 @@ const JobList = () => {
 
       <div className={styles.jobList}>
         {filteredJobs.length > 0 ? (
-          filteredJobs.map((job, index) => <JobCard key={index} job={job} />)
+          filteredJobs.map((job) => (
+            <JobCard key={job.id} job={job} deleteJob={deleteJob} />
+          ))
         ) : (
-          <p>No jobs match your search.</p>
+          <p>No jobs found</p>
         )}
       </div>
     </div>

@@ -1,8 +1,37 @@
 import React, { useState } from 'react';
 import styles from './JobCard.module.css';
 
-const JobCard = ({ job }) => {
+const JobCard = ({ job, deleteJob }) => {
   const [showDetails, setShowDetails] = useState(false);
+
+  const checkCandidateList = async () => {
+    try {
+      const getRankingUrl = new URL('http://localhost:8080/api/get-job-top')
+      getRankingUrl.searchParams.append('jobId', job.id)
+      getRankingUrl.searchParams.append('limit', 100)
+
+      const response = await fetch(getRankingUrl);
+      
+    } catch (err) {
+      console.error('Error fetching jobs:', err);
+    }
+  }
+
+  const removeJob = async () => {
+    const deleteJobUrl = new URL('http://localhost:8080/api/delete-job')
+    deleteJobUrl.searchParams.append('jobId', job.id)
+    
+    const response = await fetch(deleteJobUrl, {
+      method : 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+
+    if(response.ok) {
+      deleteJob(job.id)
+    }
+  }
 
   const toggleDetails = () => {
     setShowDetails(!showDetails);
@@ -15,13 +44,7 @@ const JobCard = ({ job }) => {
       </div>
       <div className={styles.topRow}>
         <h2 className={styles.position}>{job.Role}</h2>
-        <div className={styles.tags}>
-          {job.Skills.Programming.map((tag, index) => (
-            <span key={index} className={styles.tag}>
-              {tag}
-            </span>
-          ))}
-        </div>
+        
       </div>
 
       <div className={styles.bottomRow}>
@@ -87,8 +110,8 @@ const JobCard = ({ job }) => {
         )}
 
         <div className={styles.buttons}>
-          <button className={styles.btnPrimary}>Check candidate list</button>
-          <button className={styles.btnDanger}>Remove Job</button>
+          <button className={styles.btnPrimary} onClick={checkCandidateList}>Check candidate list</button>
+          <button className={styles.btnDanger} onClick={removeJob}>Remove Job</button>
         </div>
       </div>
     </div>
