@@ -11,6 +11,12 @@ const JobCard = ({ job, deleteJob }) => {
       getRankingUrl.searchParams.append('limit', 100)
 
       const response = await fetch(getRankingUrl);
+
+      if(response.ok) {
+        const data = await response.json()
+        console.log(data)
+        //TODO : cv urile vin in ordinea buna, primul fiind cel mai corelat de job, acum doar trebuie creat un CV folosind datele din json si afisata o lista cu CV-uri
+      }
       
     } catch (err) {
       console.error('Error fetching jobs:', err);
