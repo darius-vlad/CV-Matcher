@@ -118,8 +118,7 @@ public class Controller {
 
     @GetMapping("/get-job-top")
     public ResponseEntity<Object> getJobTopCv(@RequestParam("jobId") Long jobId, @RequestParam("limit") int limit) {
-        List<Map<String, String>> cvList = new ArrayList<>();
-
+        List<Map<String, Object>> cvList = new ArrayList<>();
         List<CvSimilarityDTO> topCvList = pgService.getTopCvForJobId(jobId, limit);
 
         for(CvSimilarityDTO cv : topCvList) {
@@ -134,7 +133,7 @@ public class Controller {
             String cvJsonString = new String(cvJsonBytes, StandardCharsets.UTF_8);
 
             try {
-                Map<String, String> cvJsonMapped = objectMapper.readValue(cvJsonString, Map.class);
+                Map<String, Object> cvJsonMapped = objectMapper.readValue(cvJsonString, Map.class);
                 cvList.add(cvJsonMapped);
             } catch (JsonProcessingException e) {
                 // TODO : handle different multiple exceptions
@@ -142,6 +141,25 @@ public class Controller {
         }
 
         return ResponseEntity.ok(cvList);
+    }
+
+    @GetMapping("get-all-jobs")
+    public ResponseEntity<List<Map<String, Object>>> getAllJobs() {
+        List<Map<String, Object>> result = new ArrayList<>();
+        List<byte[]> jobs = filebaseService.getFolder("jobs-processed/");
+
+        for(byte[] job : jobs) {
+            String jobJsonString = new String(job, StandardCharsets.UTF_8);
+
+            try {
+                Map<String, Object> jobJsonMapped = objectMapper.readValue(jobJsonString, Map.class);
+                result.add(jobJsonMapped);
+            } catch (JsonProcessingException e) {
+                // TODO : handle different multiple exceptions
+            }
+        }
+
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("delete-job")

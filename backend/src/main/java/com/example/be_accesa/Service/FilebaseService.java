@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class FilebaseService {
@@ -40,6 +42,27 @@ public class FilebaseService {
         } catch (IOException e) {
             return false;
         }
+    }
+
+    public List<byte[]> getFolder(String foldername) {
+        List<byte[]> folder = new ArrayList<>();
+
+        ListObjectsV2Request request = new ListObjectsV2Request()
+                .withBucketName(bucket)
+                .withPrefix(foldername);
+
+        var items = amazonS3.listObjectsV2(request);
+
+        for(S3ObjectSummary item : items.getObjectSummaries()) {
+            String key = item.getKey();
+            byte[] content = getFile(key);
+
+            if(key != null) {
+                folder.add(content);
+            }
+        }
+
+        return folder;
     }
 
     public byte[] getFile(String filename) {
