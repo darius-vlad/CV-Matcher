@@ -1,82 +1,48 @@
 package com.example.be_accesa.Controller;
 
 import com.example.be_accesa.DTO.CvSimilarityDTO;
-import com.example.be_accesa.Model.CvHash;
 import com.example.be_accesa.Model.JobHash;
-import com.example.be_accesa.Service.*;
+import com.example.be_accesa.Service.FilebaseService;
+import com.example.be_accesa.Service.JobHashService;
+import com.example.be_accesa.Service.PGService;
+import com.example.be_accesa.Service.RedisService;
 import com.example.be_accesa.Utils.FileHasher;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
-public class Controller {
-
-    private final FilebaseService filebaseService;
-    private final PGService pgService;
-    private final RedisService redisService;
-    private final CvHashService cvHashService;
+@RequestMapping("/job")
+public class JobController {
+    Logger logger = LoggerFactory.getLogger(CvController.class);
     private final JobHashService jobHashService;
+    private final FilebaseService filebaseService;
+    private final RedisService redisService;
+    private final PGService pgService;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public Controller(FilebaseService filebaseService,
-                      PGService pgService,
-                      RedisService redisService,
-                      CvHashService cvHashService,
-                      JobHashService jobHashService,
-                      ObjectMapper objectMapper) {
-        this.filebaseService = filebaseService;
-        this.pgService = pgService;
-        this.redisService = redisService;
-        this.cvHashService = cvHashService;
+    public JobController(JobHashService jobHashService,
+                         FilebaseService filebaseService,
+                         RedisService redisService,
+                         PGService pgService,
+                         ObjectMapper objectMapper) {
         this.jobHashService = jobHashService;
+        this.filebaseService = filebaseService;
+        this.redisService = redisService;
+        this.pgService = pgService;
         this.objectMapper = objectMapper;
-    }
-
-    @PostMapping("/upload-cv-batch")
-    public ResponseEntity<Object> uploadBatch(@RequestParam("files") MultipartFile[] files) {
-        Map<String, String> map = new HashMap<>();
-
-        for(MultipartFile file : files) {
-            String cvHash = FileHasher.hashMultipartFile(file);
-
-            if(cvHash == null){
-                return ResponseEntity.badRequest().body("Error hashing cv " + file.getOriginalFilename());
-            }
-
-            CvHash newCvHash;
-
-            try{
-                newCvHash = cvHashService.save(cvHash);
-            } catch (Exception e){
-                // TODO: handle multiple different exceptions
-                continue;
-            }
-
-            String fileHashed = newCvHash.getId().toString() + ".docx";
-            String cvId = "cv-raw/" + fileHashed;
-
-            if(!filebaseService.uploadFile(cvId, file)) {
-                return ResponseEntity.badRequest().body("Error uploading raw cv " + file.getOriginalFilename());
-            }
-
-            if(!redisService.enqueueCvId(fileHashed)) {
-                return ResponseEntity.badRequest().body("Error adding cv id to queue" + file.getOriginalFilename());
-            }
-
-            map.put(file.getOriginalFilename(), cvId);
-        }
-
-        return ResponseEntity.ok(map);
     }
 
     @PostMapping("/upload-job-batch")
@@ -122,7 +88,9 @@ public class Controller {
         List<CvSimilarityDTO> topCvList = pgService.getTopCvForJobId(jobId, limit);
 
         for(CvSimilarityDTO cv : topCvList) {
-            String cvId = "cv-processed/" + cv.getId() + ".docx.json";
+            String cvId = "cv-processed/" + cv.getId() + ".json";
+
+            logger.info(String.valueOf(cv.getId()));
 
             byte[] cvJsonBytes = filebaseService.getFile(cvId);
 
@@ -146,13 +114,15 @@ public class Controller {
     @GetMapping("get-all-jobs")
     public ResponseEntity<List<Map<String, Object>>> getAllJobs() {
         List<Map<String, Object>> result = new ArrayList<>();
-        List<byte[]> jobs = filebaseService.getFolder("jobs-processed/");
+        List<Object[]> jobs = filebaseService.getFolder("job-processed/");  // 0 - content, 1 - key
 
-        for(byte[] job : jobs) {
-            String jobJsonString = new String(job, StandardCharsets.UTF_8);
+        for(Object[] job : jobs) {
+
+            String jobJsonString = new String((byte[]) job[0], StandardCharsets.UTF_8);
 
             try {
                 Map<String, Object> jobJsonMapped = objectMapper.readValue(jobJsonString, Map.class);
+                jobJsonMapped.put("id", job[1]);
                 result.add(jobJsonMapped);
             } catch (JsonProcessingException e) {
                 // TODO : handle different multiple exceptions
@@ -163,11 +133,20 @@ public class Controller {
     }
 
     @DeleteMapping("delete-job")
-    public ResponseEntity<?> deleteJob(@RequestParam("jobId") String jobId) {
-        if(filebaseService.deleteFile(jobId)) {
-            return ResponseEntity.ok("Deleted " + jobId);
+    public ResponseEntity<?> deleteJob(@RequestParam("jobId") Long jobId) {
+        String jobRawId = "job-raw/" + jobId + ".docx";
+        String jobProcessedId = "job-processed/" + jobId + ".json";
+
+        if(!filebaseService.deleteFile(jobRawId)) {
+            return ResponseEntity.badRequest().body("Error deleting raw job " + jobId);
         }
 
-        return ResponseEntity.badRequest().body("Error deleting " + jobId);
+        if(!filebaseService.deleteFile(jobProcessedId)) {
+            return ResponseEntity.badRequest().body("Error deleting processed job " + jobId);
+        }
+
+        pgService.dropJobIdColumn(jobId);
+
+        return ResponseEntity.ok("Deleted successfully " + jobId);
     }
 }

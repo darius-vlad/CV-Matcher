@@ -19,4 +19,8 @@ public class PGService {
     public List<CvSimilarityDTO> getTopCvForJobId(Long jobId, int limit) {
         return simMatrixRepo.getTopCvForJobId(jobId, limit);
     }
+
+    public void dropJobIdColumn(Long jobId) {
+        simMatrixRepo.dropJobIdColumn(jobId);
+    }
 }

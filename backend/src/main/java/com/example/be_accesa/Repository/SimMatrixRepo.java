@@ -23,4 +23,9 @@ public class SimMatrixRepo {
 
         return template.query(sqlQuery, new CvSimilarityRowMapper(), limit);
     }
+
+    public void dropJobIdColumn(Long jobId) {
+        String sqlQuery = "ALTER TABLE sim_matrix DROP COLUMN \"" + jobId + "\";";
+        template.update(sqlQuery);
+    }
 }

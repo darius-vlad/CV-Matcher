@@ -2,6 +2,8 @@ package com.example.be_accesa.Service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @Service
 public class FilebaseService {
+    Logger logger = LoggerFactory.getLogger(FilebaseService.class);
     private final AmazonS3 amazonS3;
 
     @Value("${aws.s3.bucket}")
@@ -44,8 +47,8 @@ public class FilebaseService {
         }
     }
 
-    public List<byte[]> getFolder(String foldername) {
-        List<byte[]> folder = new ArrayList<>();
+    public List<Object[]> getFolder(String foldername) {
+        List<Object[]> folder = new ArrayList<>();
 
         ListObjectsV2Request request = new ListObjectsV2Request()
                 .withBucketName(bucket)
@@ -57,8 +60,9 @@ public class FilebaseService {
             String key = item.getKey();
             byte[] content = getFile(key);
 
-            if(key != null) {
-                folder.add(content);
+            if(key != null && !key.equals(foldername)) {
+                String cleanId = key.substring(key.lastIndexOf("/") + 1, key.lastIndexOf(".json"));
+                folder.add(new Object[]{ content, cleanId });
             }
         }
 
@@ -79,6 +83,7 @@ public class FilebaseService {
     public boolean deleteFile(String filename) {
         try {
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, filename));
+
             return true;
         }
         catch (Exception e) {
