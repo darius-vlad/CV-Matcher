@@ -19,4 +19,8 @@ public class JobHashService {
     public JobHash save(String fileHash){
         return jobRepo.save(new JobHash(fileHash));
     }
+
+    public void deleteById(Long jobId) {
+        jobRepo.deleteById(jobId);
+    }
 }
