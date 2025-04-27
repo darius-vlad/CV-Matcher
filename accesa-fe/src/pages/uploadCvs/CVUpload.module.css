@@ -138,4 +138,12 @@
     background-color: #ccc;
     cursor: not-allowed;
   }
+
+  .switch {
+    display: flex;
+    flex-direction: column;
+    padding: 5vh;
+    justify-content: center;
+    align-items: center;
+  }
   

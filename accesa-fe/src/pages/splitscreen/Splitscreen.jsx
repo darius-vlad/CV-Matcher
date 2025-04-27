@@ -29,7 +29,7 @@ const SplitScreen = () => {
     <div className={containerClass}>
       <div className={styles.panelLeft}  onMouseEnter={() => setHovered('left')} onMouseLeave={() => setHovered(null)}>
         <img src={leftImage} alt="Left" className={styles.circularImage} />
-        <button className={styles.button} onClick={handleInsertCVClick}>Insert CV</button>
+        <button className={styles.button} onClick={handleInsertCVClick}>Insert CV / Job</button>
       </div>
 
       <div className={styles.logoContainer}>
