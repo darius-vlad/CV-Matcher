@@ -38,7 +38,7 @@ const CVUpload = () => {
       files.forEach((file) => formData.append('files', file));
   
       try {
-        const response = await fetch('http://localhost:8080/api/upload-cv-batch', {
+        const response = await fetch('http://localhost:8080/cv/upload-cv-batch', {
           method: 'POST',
           body: formData,
         });

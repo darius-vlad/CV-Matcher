@@ -6,7 +6,7 @@ const JobCard = ({ job, deleteJob }) => {
 
   const checkCandidateList = async () => {
     try {
-      const getRankingUrl = new URL('http://localhost:8080/api/get-job-top')
+      const getRankingUrl = new URL('http://localhost:8080/job/get-job-top')
       getRankingUrl.searchParams.append('jobId', job.id)
       getRankingUrl.searchParams.append('limit', 100)
 
@@ -24,7 +24,7 @@ const JobCard = ({ job, deleteJob }) => {
   }
 
   const removeJob = async () => {
-    const deleteJobUrl = new URL('http://localhost:8080/api/delete-job')
+    const deleteJobUrl = new URL('http://localhost:8080/job/delete-job')
     deleteJobUrl.searchParams.append('jobId', job.id)
     
     const response = await fetch(deleteJobUrl, {
