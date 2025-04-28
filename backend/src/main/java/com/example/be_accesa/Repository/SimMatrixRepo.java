@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class SimMatrixRepo {
@@ -25,7 +24,12 @@ public class SimMatrixRepo {
     }
 
     public void dropJobIdColumn(Long jobId) {
-        String sqlQuery = "ALTER TABLE sim_matrix DROP COLUMN \"" + jobId + "\";";
-        template.update(sqlQuery);
+        String columnName = jobId.toString();
+        String sqlQuery = "ALTER TABLE sim_matrix DROP COLUMN IF EXISTS \"" + columnName + "\";";
+
+        try {
+            template.update(sqlQuery);
+        }
+        catch (Exception e) {}
     }
 }

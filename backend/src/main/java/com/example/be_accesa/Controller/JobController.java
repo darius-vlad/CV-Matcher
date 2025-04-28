@@ -91,8 +91,6 @@ public class JobController {
         for(CvSimilarityDTO cv : topCvList) {
             String cvId = "cv-processed/" + cv.getId() + ".json";
 
-            logger.info(String.valueOf(cv.getId()));
-
             byte[] cvJsonBytes = filebaseService.getFile(cvId);
 
             if(cvJsonBytes == null) {
@@ -147,6 +145,8 @@ public class JobController {
         }
 
         pgService.dropJobIdColumn(jobId);
+        pgService.deleteJobEmbeddingsRowById(jobId);
+        pgService.deleteJobHashRowById(jobId);
 
         return ResponseEntity.ok("Deleted successfully " + jobId);
     }
