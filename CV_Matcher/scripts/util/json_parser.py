@@ -2,26 +2,30 @@ import ollama
 import re
 
 def summary_cv(cv_text):
-    model = 'deepseek-r1:1.5b_vram'
+    model = 'deepseek-r1:8b_vram'
     prompt = """
 You are a CV-to-JSON converter. Transform input CVs into JSON format following these rules:
 
 1. PRESERVE THESE KEYS WITH EXACT TEXT:
    - "Name" (string)
+   - "Contact Information" (Object) (if exists)
    - "Technical Skills" (array)
    - "Education" (array)
    - "Foreign Languages" (array)
    - "Certifications" (array)
    - "Work Experience" (array, if exists)
-
 2. PROCESS PROJECTS:
    "Project Experience" (object) containing:
    - "Hidden Skills" (array of 3-5 inferred skills)
    - "Technologies Used" (array of explicit tech items)
-
 3. OUTPUT EXAMPLE (COMPLETE WITH ACTUAL DATA):
 {
-  "Name": "Joh Doe",
+  "Name": "John Doe",
+  "Contact Information": {
+    "Phone": "0753741234",
+    "Email": "john.doe@gmail.com",
+    "Location": "Colorado"
+  },
   "Technical Skills": ["JavaScript", "React", "TypeScript", "Java", "Spring Boot", "AWS", "Docker", "SQL", "PostgreSQL"],
   "Foreign Languages": ["English", "Romanian"],
   "Education": [
@@ -54,12 +58,9 @@ You are a CV-to-JSON converter. Transform input CVs into JSON format following t
     }
   ]
 }
-
 4. SPECIAL RULES:
-   - Omit "Project Experience" key entirely if no projects
    - Keep original dates/company names in "Work Experience"
    - Maintain exact certification/language wording
-   - Only use double quotes, no trailing commas
    - No additional fields/comments
 
 DO NOT ADD ANYTHING ELSE, STRICTLY FOLLOW THE OUTPUT EXAMPLE.
@@ -81,7 +82,7 @@ The text:
     return summary
 
 def summary_job(job_text):
-    model = 'deepseek-r1:1.5b_vram'
+    model = 'deepseek-r1:8b_vram'
     prompt = """Act as a job post parser. Analyze the provided job description and return a structured JSON output in the following format:  
 {  
   "Type": "[junior/senior/etc] (extracted from job title)",  
