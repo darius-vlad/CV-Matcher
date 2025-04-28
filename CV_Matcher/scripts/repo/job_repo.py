@@ -18,10 +18,10 @@ def save_job_embeddings(df_orig: pd.DataFrame) -> pd.DataFrame:
 def get_jobs_df() -> pd.DataFrame:
     global cache_valid, cached_data
 
-    with cache_lock:
-        if not cache_valid:
-            cached_data = get_df(table_name)
-            cache_valid = True
+    # with cache_lock:
+    #     if not cache_valid:
+    cached_data = get_df(table_name)
+            # cache_valid = True
 
     return cached_data
 
