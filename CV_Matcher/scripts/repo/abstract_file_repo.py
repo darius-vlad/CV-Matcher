@@ -20,9 +20,6 @@ DB_CONFIG = {
     "port": "5432"
 }
 
-cached_data = None
-cache_valid = False
-
 def get_connection():
     return psycopg2.connect(**DB_CONFIG)
 
@@ -51,10 +48,6 @@ def save_embeddings(df_orig: pd.DataFrame, collection_name: str) -> pd.DataFrame
 
 # Get all Job embeddings as DataFrame
 def get_df(collection_name: str) -> pd.DataFrame:
-    global cached_data, cache_valid
-
-    if cache_valid:
-        return cached_data
 
     with get_connection() as conn:
         # Build safe SQL query with dynamic table name
@@ -67,7 +60,4 @@ def get_df(collection_name: str) -> pd.DataFrame:
     # Convert stored lists back to numpy arrays
     df['embedding'] = df['embedding'].apply(np.array)
 
-    cached_data = convert_compact_to_wide(df)
-    cache_valid = True
-
-    return cached_data
+    return convert_compact_to_wide(df)
