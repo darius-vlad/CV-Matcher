@@ -4,7 +4,7 @@ from psycopg2 import sql
 DB_CONFIG = {
     "dbname": "CV_Matcher",
     "user": "postgres",
-    "password": "omega1234",
+    "password": "changeme",
     "host": "localhost",
     "port": "5432"
 }
