@@ -69,7 +69,7 @@ const CVUpload = () => {
   return (
     <div className={styles.fullPage}>
       <div className={styles.switch}>
-        <span className={styles.dropText}>{selected ? "CV" : "Job"}</span>
+        <span className={styles.dropText}>{selected ? "Job" : "CV"}</span>
         <Switch
           checked={selected}
           onChange={handleChange}
