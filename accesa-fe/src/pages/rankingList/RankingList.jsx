@@ -21,7 +21,7 @@ const RankingList = () => {
         getRankingUrl.searchParams.append("limit", 100);
 
         const response = await fetch(getRankingUrl);
-
+        
         if (response.ok) {
           const data = await response.json();
           setCvList(data);

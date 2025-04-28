@@ -89,6 +89,7 @@
   .projectCard {
     background-color: #f9f9f9;
     border-left: 4px solid #5ca5a5;
+    color: #888;
     padding: 1rem;
     border-radius: 8px;
   }
