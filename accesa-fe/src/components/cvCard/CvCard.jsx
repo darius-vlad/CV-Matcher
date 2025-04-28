@@ -111,7 +111,7 @@ const CvCard = ({ cv }) => {
                   <h4>{project.Title}</h4>
 
                   <div>
-                    <strong></strong>
+                    <strong>Hidden Skills:</strong>
                     <ul className={styles.itemList}>
                       {project["Hidden Skills"].map((skill, idx) => (
                         <li key={idx} className={styles.item}>
