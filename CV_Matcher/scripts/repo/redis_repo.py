@@ -1,6 +1,7 @@
 import asyncio
 import redis.asyncio as redis
 import scripts.repo.filebase_repo as filebase
+from scripts.db_configure import delete_job_id_from_tables, delete_cv_id_from_tables
 from scripts.repo.cv_repo import save_cv_embeddings, get_cvs_df
 from scripts.repo.job_repo import get_jobs_df, save_job_embeddings
 from scripts.repo.sim_matrix_repo import insert_new_row, insert_new_column
@@ -33,10 +34,10 @@ async def listener(stop_event: asyncio.Event):
 
 async def process_cv(data: bytes):
     file_insert = ''
+    cv_id = ''
     try:
         file = f'cv-raw/{data.decode('utf-8')}'
         print("Process CV:", file)
-        print('CV: ' + data.decode('utf-8'))
         cv = filebase.get_object(file)
 
         cv_id = int(data.decode('utf-8').split('.')[0])
@@ -56,10 +57,13 @@ async def process_cv(data: bytes):
         await client.lpush(ACK_CV_QUEUE, f"s:{cv_id}.json")
     except Exception as e:
         print(f"Error processing CV: {e}")
+        print("[ERROR] CV ID:", cv_id)
+        delete_cv_id_from_tables(int(cv_id))
         await client.lpush(ACK_CV_QUEUE, f"e:{data.decode('utf-8')}")
 
 async def process_job(data: bytes):
     file_insert = ''
+    job_id = ''
     try:
         file = f'job-raw/{data.decode('utf-8')}'
         print("Process job:", file)
@@ -82,6 +86,7 @@ async def process_job(data: bytes):
         await client.lpush(ACK_JOB_QUEUE, f"s:{job_id}.json")
     except Exception as e:
         print(f"Error processing Job: {e}")
+        delete_job_id_from_tables(int(job_id))
         await client.lpush(ACK_JOB_QUEUE, f"e:{data.decode('utf-8')}")
 
 

@@ -5,11 +5,20 @@ from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
 
 from scripts.util.df_util import convert_wide_to_compact, convert_compact_to_wide
+from dotenv import load_dotenv
+import os
+
+
+
+
+load_dotenv()
+
+PASSWORD = os.getenv("POSTGRES_PASSWORD")
 
 DB_CONFIG = {
     "dbname": "CV_Matcher",
     "user": "postgres",
-    "password": "changeme",
+    "password": PASSWORD,
     "host": "localhost",
     "port": "5432"
 }
