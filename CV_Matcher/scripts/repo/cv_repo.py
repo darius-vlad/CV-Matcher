@@ -1,8 +1,14 @@
+import threading
+
 import pandas as pd
 
 from scripts.repo.abstract_file_repo import save_embeddings, get_df
 
 table_name = "cv_embeddings"
+
+cached_data = None
+cache_valid = False
+cache_lock = threading.Lock()
 
 # Save cv embeddings from DataFrame
 def save_cv_embeddings(df_orig: pd.DataFrame) -> pd.DataFrame:
@@ -10,4 +16,16 @@ def save_cv_embeddings(df_orig: pd.DataFrame) -> pd.DataFrame:
 
 # Get all cv embeddings as DataFrame
 def get_cvs_df() -> pd.DataFrame:
-    return get_df(table_name)
+    global cache_valid, cached_data
+
+    with cache_lock:
+        if not cache_valid:
+            cached_data = get_df(table_name)
+            cache_valid = True
+
+    return cached_data
+
+def invalidate_cv_cache():
+    with cache_lock:
+        global cache_valid
+        cache_valid = False

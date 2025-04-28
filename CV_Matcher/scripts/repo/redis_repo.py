@@ -2,8 +2,8 @@ import asyncio
 import redis.asyncio as redis
 import scripts.repo.filebase_repo as filebase
 from scripts.db_configure import delete_job_id_from_tables, delete_cv_id_from_tables
-from scripts.repo.cv_repo import save_cv_embeddings, get_cvs_df
-from scripts.repo.job_repo import get_jobs_df, save_job_embeddings
+from scripts.repo.cv_repo import save_cv_embeddings, get_cvs_df, invalidate_cv_cache
+from scripts.repo.job_repo import get_jobs_df, save_job_embeddings, invalidate_job_cache
 from scripts.repo.sim_matrix_repo import insert_new_row, insert_new_column
 from scripts.util import cv_util, job_util
 from scripts.repo.abstract_file_repo import get_connection
@@ -45,6 +45,7 @@ async def process_cv(data: bytes):
         cv_embedding, sim_measures, json_cv = cv_util.process_cv(cv, job_vector_embeddings, cv_id)
         # save cv_vector_embedding in db
         save_cv_embeddings(cv_embedding)
+        invalidate_cv_cache()
         # insert new sim_measure 'row'
         # if sim_measures is not None:
         insert_new_row(get_connection(), cv_id, sim_measures)
@@ -74,6 +75,7 @@ async def process_job(data: bytes):
         job_embedding, sim_measures, json_job = job_util.process_job(cv_vector_embeddings, job, job_id)
         # save job_vector_embedding in db
         save_job_embeddings(job_embedding)
+        invalidate_job_cache()
         # insert new sim_measure 'row'
         insert_new_column(get_connection(), str(job_id), sim_measures)
 
