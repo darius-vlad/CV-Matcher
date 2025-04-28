@@ -41,7 +41,6 @@ async def process_cv(data: bytes):
         cv = filebase.get_object(file)
 
         cv_id = int(data.decode('utf-8').split('.')[0])
-        # TODO: cache job_vector_embeddings for better performance
         job_vector_embeddings = get_jobs_df()
         cv_embedding, sim_measures, json_cv = cv_util.process_cv(cv, job_vector_embeddings, cv_id)
         # save cv_vector_embedding in db
@@ -71,7 +70,6 @@ async def process_job(data: bytes):
         job = filebase.get_object(file)
 
         job_id = int(data.decode('utf-8').split('.')[0])
-        # TODO: cache cv_vector_embeddings for better performance
         cv_vector_embeddings = get_cvs_df()
         job_embedding, sim_measures, json_job = job_util.process_job(cv_vector_embeddings, job, job_id)
         # save job_vector_embedding in db

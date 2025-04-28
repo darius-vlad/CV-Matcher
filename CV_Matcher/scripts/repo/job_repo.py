@@ -11,3 +11,4 @@ def save_job_embeddings(df_orig: pd.DataFrame) -> pd.DataFrame:
 # Get all Job embeddings as DataFrame
 def get_jobs_df() -> pd.DataFrame:
     return get_df(table_name)
+

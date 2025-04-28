@@ -17,3 +17,4 @@ def add_jobs(jobs): # actual text from docx/pdf file
         save_job_embeddings(job_embedding)
         # insert new sim_measure 'column'
         insert_new_column(get_connection(), str(id), sim_measures)
+
