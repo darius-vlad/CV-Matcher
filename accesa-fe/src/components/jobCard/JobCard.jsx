@@ -114,3 +114,5 @@ const JobCard = ({ job, deleteJob }) => {
 };
 
 export default JobCard;
+
+//add functionality
